@@ -50,7 +50,10 @@ class EloquentBase extends \Eloquent {
     }
 
     protected function getUser($user = null){
-        if(!$user)  $user = \Auth::user();
+        if(!$user) {
+            $getAuthUserMethod = \Config::get('hermes.getAuthUserMethod', '\Auth::user');
+            eval('$user = '.$getAuthUserMethod.'();');
+        }
 
         if(!$user){
             throw new \Exception('It is not possible to add a message without a valid user or login.');
